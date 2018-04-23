@@ -21,7 +21,7 @@ public class UserRegistrationDto {
     private static final String USERNAME_PATTERN = "^[a-z0-9_-]{3,15}$";
 
 
-    @Pattern(regexp = USERNAME_PATTERN, message = "Username cannot have spaces neither extrange characters")
+    @Pattern(regexp = USERNAME_PATTERN, message = "Username cannot have spaces neither strange characters or uppercase")
     @NotEmpty(message = "User name cannot be empty")
     private String username;
 
@@ -63,9 +63,9 @@ public class UserRegistrationDto {
     @AssertTrue
     private Boolean terms;
 
-    public Long getId(){ return id; };
+    public Long getId(){ return id; }
 
-    public void setId(Long id){ this.id = id; };
+    public void setId(Long id){ this.id = id; }
 
     public String getAddress() {
         return address;

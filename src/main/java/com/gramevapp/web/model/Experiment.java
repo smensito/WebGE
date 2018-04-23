@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -84,6 +85,14 @@ public class Experiment {
     @Column
     private Integer numberRuns = 1;
 
+    @Column(name="creationDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate = null;
+
+    @Column(name="updateDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date modificationDate = null;
+
     public Experiment() {
         this.idExpDataTypeList = new ArrayList<>();
         this.idGrammarList = new ArrayList<>();
@@ -98,7 +107,7 @@ public class Experiment {
         this.idRunList = idRunList;
     }
 
-    public Experiment(User userId, String experimentName, String experimentDescription, Integer generations, Integer populationSize, Integer maxWraps, Integer tournament, Double crossoverProb, Double mutationProb, String initialization, String results, Integer numCodons, Integer numberRuns) {
+    public Experiment(User userId, String experimentName, String experimentDescription, Integer generations, Integer populationSize, Integer maxWraps, Integer tournament, Double crossoverProb, Double mutationProb, String initialization, String results, Integer numCodons, Integer numberRuns, Date creationDate, Date modificationDate) {
         this.userId = userId;
         this.experimentName = experimentName;
         this.experimentDescription = experimentDescription;
@@ -116,9 +125,12 @@ public class Experiment {
         this.idExpDataTypeList = new ArrayList<>();
         this.idGrammarList = new ArrayList<>();
         this.idRunList = new ArrayList<>();
+
+        this.modificationDate = modificationDate;
+        this.creationDate = creationDate;
     }
 
-    public Experiment(User userId, String experimentName, String experimentDescription, List<Grammar> idGrammarList, List<ExperimentDataType> idExpDataTypeList, List<Run> idRunList, Integer generations, Integer populationSize, Integer maxWraps, Integer tournament, Double crossoverProb, Double mutationProb, String initialization, String results, Integer numCodons, Integer numberRuns) {
+    public Experiment(User userId, String experimentName, String experimentDescription, List<Grammar> idGrammarList, List<ExperimentDataType> idExpDataTypeList, List<Run> idRunList, Integer generations, Integer populationSize, Integer maxWraps, Integer tournament, Double crossoverProb, Double mutationProb, String initialization, String results, Integer numCodons, Integer numberRuns, Date creationDate, Date modificationDate) {
         this.userId = userId;
         this.experimentName = experimentName;
         this.experimentDescription = experimentDescription;
@@ -135,6 +147,8 @@ public class Experiment {
         this.results = results;
         this.numCodons = numCodons;
         this.numberRuns = numberRuns;
+        this.modificationDate = modificationDate;
+        this.creationDate = creationDate;
     }
 
     public Grammar getDefaultGrammar() {
@@ -307,5 +321,39 @@ public class Experiment {
 
     public void setResults(String results) {
         this.results = results;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+    }
+
+    public void updateExperiment(Grammar grammar, ExperimentDataType expDataType, String experimentName, String experimentDescription, Integer generations, Integer populationSize, Integer maxWraps, Integer tournament, Double crossoverProb, Double mutationProb, String initialization, String results, Integer numCodons, Integer numberRuns, Date modificationDate){
+        this.defaultExpDataType = expDataType;
+        this.defaultGrammar = grammar;
+        this.experimentName = experimentName;
+        this.experimentDescription = experimentDescription;
+        this.generations = generations;
+        this.populationSize = populationSize;
+        this.maxWraps = maxWraps;
+        this.tournament = tournament;
+        this.crossoverProb = crossoverProb;
+        this.mutationProb = mutationProb;
+        this.initialization = initialization;
+        this.results = results;
+        this.numCodons = numCodons;
+        this.numberRuns = numberRuns;
+        this.modificationDate = modificationDate;
     }
 }
