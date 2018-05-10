@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static com.engine.util.Common.OBJECTIVES_PROP;
+import static com.engine.util.Common.TRAINING_PATH_PROP;
 
 @Controller
 public class ExperimentController {
@@ -298,6 +299,8 @@ public class ExperimentController {
         // END - Create PropertiesDto file
         MultipartFile multipartFile = fileModelDto.getTypeFile();
 
+        String dataFilePath = "";
+
         // If Radio button and file path selected -> File path is selected
         // NULL -> didn't select the dataType file from the list - ON if th:value in input is empty
         if( (radioDataType.equals("on") && !multipartFile.isEmpty()) || (!radioDataType.equals("on") && !multipartFile.isEmpty()) ) {
@@ -305,10 +308,12 @@ public class ExperimentController {
                     multipartFile.getOriginalFilename());
             multipartFile.transferTo(tmpFile);
 
+            dataFilePath = tmpFile.getAbsolutePath();
+
             Reader reader = new FileReader(tmpFile);
             experimentService.loadExperimentRowTypeFile(reader, expDataType);   // Save row here
             reader.close();
-
+/*
             new File(dataTypeDirectoryPath).mkdirs(); // Create the directory to save datatype files
 
             InputStream dataTypeInputStream = null;
@@ -329,6 +334,7 @@ public class ExperimentController {
             while ((dataTypeRead = dataTypeInputStream.read(dataTypeBytes)) != -1) {
                 dataTypeOutputStream.write(dataTypeBytes, 0, dataTypeRead);
             }
+*/
         }
         else if(radioDataType.equals("on") && multipartFile.isEmpty()) {        // Radio button neither file path selected
             result.rejectValue("typeFile", "error.typeFile", "Choose one file");
@@ -362,6 +368,10 @@ public class ExperimentController {
 
         Properties properties = new Properties();
         properties.load(propertiesReader);
+
+        // TODO: no distinguir el tipo de fichero entre training, validation o test.
+        properties.setProperty(TRAINING_PATH_PROP,dataFilePath);
+
 
         /*String examplePath = ".\\resources\\example\\example.properties";
         File exampleFile = new File(examplePath);

@@ -66,6 +66,8 @@ public class SymbolicRegressionGE extends AbstractProblemGE {
                 Integer.valueOf(properties.getProperty(com.engine.util.Common.MAX_WRAPS_PROP)),
                 AbstractProblemGE.CODON_UPPER_BOUND_DEFAULT);
 
+        this.properties = properties;
+
         if (this.properties.getProperty(com.engine.util.Common.SENSIBLE_INITIALIZATION) != null) { // Not initializated in properties
             this.setSensibleInitialization(true,Double.valueOf(this.properties.getProperty(com.engine.util.Common.SENSIBLE_INITIALIZATION)));
         }
