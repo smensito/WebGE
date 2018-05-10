@@ -1,6 +1,6 @@
 package com.gramevapp.web.controller;
 
-import com.engine.algorithm.GrammaticalEvolution;
+import com.engine.algorithm.SymbolicRegressionGE;
 import com.gramevapp.web.model.*;
 import com.gramevapp.web.service.ExperimentService;
 import com.gramevapp.web.service.RunService;
@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+
+import static com.engine.util.Common.OBJECTIVES_PROP;
 
 @Controller
 public class ExperimentController {
@@ -371,12 +373,9 @@ public class ExperimentController {
 
         properties.store(out, "example");*/
 
-        int numObjectives = 1;  // Example
-        int threadId = 1;
-
         DiagramData diagramData = new DiagramData(user, run);
 
-        executeGramEv(properties, threadId, numObjectives, diagramData);        // PropertiesDto properties, int threadId, int numObjectives
+        executeGramEv(properties, diagramData);        // PropertiesDto properties, int threadId, int numObjectives
 
         propertiesReader.close();
         // END - Execute program with experiment info
@@ -470,9 +469,15 @@ public class ExperimentController {
      *
      */
 
-    public void executeGramEv(Properties properties, int threadId, int numObjectives, DiagramData diagramData) throws IOException {
+    public void executeGramEv(Properties properties, DiagramData diagramData) throws IOException {
 
-        GrammaticalEvolution ge = new GrammaticalEvolution(properties);
+        int numObjectives = 1;
+        if ((properties.getProperty(OBJECTIVES_PROP) != null)
+                && (Integer.valueOf(properties.getProperty(OBJECTIVES_PROP)) == 2)) {
+            numObjectives = 2;
+        }
+
+        SymbolicRegressionGE ge = new SymbolicRegressionGE(properties,numObjectives);
 
         RunGeObserver observer = new RunGeObserver();
         observer.setDiagramData(diagramData);
