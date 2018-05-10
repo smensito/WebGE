@@ -1,10 +1,10 @@
 package com.gramevapp.web.controller;
 
+import com.engine.algorithm.GrammaticalEvolution;
 import com.gramevapp.web.model.*;
 import com.gramevapp.web.service.ExperimentService;
 import com.gramevapp.web.service.RunService;
 import com.gramevapp.web.service.UserService;
-import com.engine.algorithm.GramEvalTemporalModel;
 import com.engine.algorithm.RunGeObserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -465,17 +465,19 @@ public class ExperimentController {
         return "/user/experiment/configExperiment";
     }
 
-    /** Run gramEv application
+    /**
+     * Run gramEv application
      *
      */
 
     public void executeGramEv(Properties properties, int threadId, int numObjectives, DiagramData diagramData) throws IOException {
-        GramEvalTemporalModel gramEvalTemporalModel = new GramEvalTemporalModel(properties, threadId, numObjectives);
+
+        GrammaticalEvolution ge = new GrammaticalEvolution(properties);
 
         RunGeObserver observer = new RunGeObserver();
         observer.setDiagramData(diagramData);
 
-        gramEvalTemporalModel.runGE(properties, threadId, observer);
+        ge.runGE(observer);
     }
 
 
